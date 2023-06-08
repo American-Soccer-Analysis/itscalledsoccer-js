@@ -1,7 +1,7 @@
 {
   "name": "itscalledsoccer",
-  "version": "1.0.1",
-  "description": "A library for interacting with the ASA api",
+  "version": "1.0.0",
+  "description": "A library for interacting with the ASA API",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/American-Soccer-Analysis/itscalledsoccer"
+    "url": "https://github.com/American-Soccer-Analysis/itscalledsoccer-js"
   },
   "dependencies": {
     "change-case": "^4.1.2",
