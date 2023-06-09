@@ -31,8 +31,6 @@ body:
       label: What version of Node are you using?
       multiple: false
       options:
-        - Node 14.x
-        - Node 16.x
         - Node 18.x
         - Node 19.x
         - Node 20.x
