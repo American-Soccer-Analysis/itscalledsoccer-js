@@ -8,4 +8,7 @@ module.exports = {
       lines: 90,
     },
   },
+  globals: {
+    structuredClone: {}
+  }
 };
