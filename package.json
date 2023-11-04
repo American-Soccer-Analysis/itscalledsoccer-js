@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "change-case": "^4.1.2",
-    "core-js": "^3.32.2",
+    "core-js": "^3.33.2",
     "fuse.js": "^6.5.3",
     "isomorphic-fetch": "^3.0.0",
     "regenerator-runtime": "^0.14.0"
