@@ -24,7 +24,7 @@
     "url": "https://github.com/American-Soccer-Analysis/itscalledsoccer-js"
   },
   "dependencies": {
-    "change-case": "^4.1.2",
+    "change-case": "^5.2.0",
     "core-js": "^3.33.3",
     "fuse.js": "^7.0.0",
     "isomorphic-fetch": "^3.0.0",
