@@ -28,7 +28,7 @@
     "core-js": "^3.33.3",
     "fuse.js": "^7.0.0",
     "isomorphic-fetch": "^3.0.0",
-    "regenerator-runtime": "^0.14.0"
+    "regenerator-runtime": "^0.14.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
