@@ -1,4 +1,3 @@
-import fetch from "isomorphic-fetch";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import Fuse from "fuse.js";
@@ -23,18 +22,18 @@ import {
   teamsGoalsAddedParameters,
   teamsSalariesParameters,
   gamesXgoalsParameters,
-} from "./parameters.js";
+} from "./parameters";
 
 export default class Client {
   #fuses = new Map();
   #minimumFuseScore;
 
-  constructor({ minimumFuseScore } = {}) {
-    this.#minimumFuseScore = minimumFuseScore || MIN_FUSE_SCORE;
+  constructor({ minimumFuseScore = MIN_FUSE_SCORE }: { minimumFuseScore?: number } = {}) {
+    this.#minimumFuseScore = minimumFuseScore;
   }
 
   /* utils */
-  async #convertNameToId({ name, entityType, league }) {
+  async #convertNameToId({ name, entityType, league }: { name: string, entityType: string, league: string }) {
     const fuseKey = `${league}|${entityType}`;
 
     let fuse;
@@ -68,7 +67,7 @@ export default class Client {
     return result[0].item;
   }
 
-  async #getEntityIdsByName({ names = [], entityType, leagues }) {
+  async #getEntityIdsByName({ names = [], entityType, leagues }: { names?: string[], entityType: string, leagues: string[] }) {
     if (!names.length) {
       const entities = new Map();
 
@@ -94,7 +93,7 @@ export default class Client {
     );
   }
 
-  async #fetchEntity({ leagues, entityType, ids = [] }) {
+  async #fetchEntity({ leagues, entityType, ids = [] }: { leagues: string[], entityType: string, ids?: string[] }) {
     const results = await Promise.all(
       leagues.map(async (league) => {
         const url = `${BASE_URL}${league}/${pluralize(entityType)}${
@@ -116,7 +115,7 @@ export default class Client {
     return results.reduce((acc, curr) => acc.concat(curr), []);
   }
 
-  async #getStats({ leagues, urlFragment, urlParams }) {
+  async #getStats({ leagues, urlFragment, urlParams }: { leagues: string[], urlFragment: string, urlParams: object }) {
     const urls = leagues.map((league) => {
       const url = new URL(`${BASE_URL}${league}${urlFragment}`);
       if (Object.keys(urlParams).length > 0) {

@@ -1,7 +1,7 @@
 import { camelCase } from "change-case";
 
-const parameterize = (parametersArray) => {
-  return new Set(parametersArray.map(camelCase));
+const parameterize = (parametersArray: string[]) => {
+  return new Set(parametersArray.map((param) => camelCase(param)));
 };
 
 export const playersXgoalsParameters = parameterize([

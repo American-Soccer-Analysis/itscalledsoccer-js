@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import {
   validateStringArray,
   validateUrlParameters,
@@ -7,7 +8,7 @@ import { camelCase } from "change-case";
 
 describe("validators", () => {
   beforeEach(() => {
-    jest.spyOn(console, "assert").mockImplementation();
+    jest.spyOn(console, "assert").mockImplementation(() => {});
     jest.resetAllMocks();
   });
   it("asserts that numerical arrays are not string arrays", () => {
@@ -22,7 +23,7 @@ describe("validators", () => {
     const message = "bar";
 
     expect(() =>
-      validateStringArray({ strings: "strings", message })
+      validateStringArray({ strings: "strings", message } as never)
     ).toThrow();
     expect(console.assert).toHaveBeenCalledWith(false, message);
   });
@@ -45,7 +46,7 @@ describe("validators", () => {
     expect(console.assert).toHaveBeenCalledWith(
       false,
       `Url parameters must be one of ${Array.from(
-        Array.from(validParameters.values()).map(camelCase)
+        Array.from(validParameters.values()).map((param) => camelCase(param))
       ).join(", ")}, got cristianRoldan instead`
     );
   });
