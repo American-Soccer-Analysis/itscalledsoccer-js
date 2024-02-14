@@ -162,7 +162,7 @@ export default class Client {
     });
   }
 
-  async getPlayers({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getPlayers({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -179,7 +179,7 @@ export default class Client {
   async getManagersByName({
     leagues = Object.values(LEAGUES),
     names = [],
-  } = {}) {
+  }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -193,7 +193,7 @@ export default class Client {
     });
   }
 
-  async getManagers({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getManagers({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -207,7 +207,7 @@ export default class Client {
     });
   }
 
-  async getStadiaByName({ leagues = Object.values(LEAGUES), names = [] } = {}) {
+  async getStadiaByName({ leagues = Object.values(LEAGUES), names = [] }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -221,7 +221,7 @@ export default class Client {
     });
   }
 
-  async getStadia({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getStadia({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -238,7 +238,7 @@ export default class Client {
   async getRefereesByName({
     leagues = Object.values(LEAGUES),
     names = [],
-  } = {}) {
+  }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -252,7 +252,7 @@ export default class Client {
     });
   }
 
-  async getReferees({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getReferees({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -266,7 +266,7 @@ export default class Client {
     });
   }
 
-  async getTeamsByName({ leagues = Object.values(LEAGUES), names = [] } = {}) {
+  async getTeamsByName({ leagues = Object.values(LEAGUES), names = [] }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -280,7 +280,7 @@ export default class Client {
     });
   }
 
-  async getTeams({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getTeams({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,

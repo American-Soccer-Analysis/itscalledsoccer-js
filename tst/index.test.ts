@@ -254,7 +254,6 @@ describe("client", () => {
         );
 
         const client = new Client();
-        // @ts-expect-error idk, gang, its some deep typescript magic
         await client[method]({ ids: mockIds });
 
         Object.values(LEAGUES).forEach((league) => {
