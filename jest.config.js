@@ -1,4 +1,5 @@
-module.exports = {
+export default {
+  preset: 'ts-jest/presets/default-esm',
   setupFilesAfterEnv: ["./jest.setup.js"],
   coverageThreshold: {
     global: {
@@ -10,5 +11,6 @@ module.exports = {
   },
   globals: {
     structuredClone: {}
-  }
+  },
+  extensionsToTreatAsEsm: [".ts"],
 };

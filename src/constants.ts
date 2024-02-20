@@ -1,6 +1,6 @@
 export const API_VERSION = "v1";
 export const BASE_URL = `https://app.americansocceranalysis.com/api/${API_VERSION}/`;
-export const MAX_FUSE_SCORE = 0.35;
+export const MIN_FUSE_SCORE = 0.35;
 
 export const LEAGUES = Object.freeze({
   NWSL: "nwsl",

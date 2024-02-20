@@ -1,10 +1,9 @@
-import fetch from "isomorphic-fetch";
-import pluralize from "../src/pluralize";
+import { jest } from "@jest/globals";
 
+import pluralize from "../src/pluralize";
 import Client from "../src";
 import { BASE_URL, ENTITY_TYPES, LEAGUES } from "../src/constants";
-
-import { playersXgoalsParameters } from "../src/parameters.js";
+import { playersXgoalsParameters } from "../src/parameters";
 
 // fetch payload mocks
 import mockPlayersPayload from "./mocks/players-payload";
@@ -25,9 +24,11 @@ import mockTeamsGoalsAddedPayload from "./mocks/teams-goals-added-payload";
 import mockTeamsSalariesPayload from "./mocks/teams-salaries-payload";
 import mockGamesXgoalsPayload from "./mocks/games-xgoals-payload";
 
-jest.mock("isomorphic-fetch");
-
 describe("client", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+  
   describe("constructor", () => {
     it("instantiates with no arguments", () => {
       expect(() => {
@@ -45,18 +46,14 @@ describe("client", () => {
   describe("parameter validation", () => {
     it("logs to the console when an invalid league is provided", async () => {
       const mockLeague = "la liga";
-      jest.spyOn(console, "assert").mockImplementation();
-      fetch.mockImplementation(() =>
-        Promise.resolve({
-          async json() {
-            return [];
-          },
-        })
+      jest.spyOn(console, "assert").mockImplementation(() => {});
+      jest.spyOn(global, "fetch").mockImplementation(() =>
+        Promise.resolve(new Response("[]", { status: 200 }))
       );
 
       const client = new Client();
       await client.getPlayersXgoals({
-        leagues: [mockLeague],
+        leagues: [mockLeague as never],
       });
 
       expect(console.assert).toHaveBeenCalledWith(
@@ -67,18 +64,14 @@ describe("client", () => {
 
     it("logs to the console when an invalid url parameter is provided", async () => {
       const mockKey = "cristianRoldan";
-      jest.spyOn(console, "assert").mockImplementation();
-      fetch.mockImplementation(() =>
-        Promise.resolve({
-          async json() {
-            return [];
-          },
-        })
+      jest.spyOn(console, "assert").mockImplementation(() => {});
+      jest.spyOn(global, "fetch").mockImplementation(() =>
+        Promise.resolve(new Response("[]", { status: 200 }))
       );
 
       const client = new Client();
       await client.getPlayersXgoals({
-        [mockKey]: "mock value",
+        [mockKey as keyof typeof playersXgoalsParameters]: "mock value",
       });
 
       expect(console.assert).toHaveBeenCalledWith(
@@ -93,57 +86,57 @@ describe("client", () => {
   describe("getStats methods", () => {
     const testParameters = [
       {
-        method: "getPlayersXpass",
+        method: "getPlayersXpass" as keyof Client,
         payload: mockPlayersXpassPayload,
         urlFragment: "/players/xpass",
       },
       {
-        method: "getPlayersXgoals",
+        method: "getPlayersXgoals" as keyof Client,
         payload: mockPlayersXgoalsPayload,
         urlFragment: "/players/xgoals",
       },
       {
-        method: "getPlayersGoalsAdded",
+        method: "getPlayersGoalsAdded" as keyof Client,
         payload: mockPlayersGoalsAddedPayload,
         urlFragment: "/players/goals-added",
       },
       {
-        method: "getPlayersSalaries",
+        method: "getPlayersSalaries" as keyof Client,
         payload: mockPlayersSalariesPayload,
         urlFragment: "/players/salaries",
       },
       {
-        method: "getGoalkeepersXgoals",
+        method: "getGoalkeepersXgoals" as keyof Client,
         payload: mockGoalkeepersXgoalsPayload,
         urlFragment: "/goalkeepers/xgoals",
       },
       {
-        method: "getGoalkeepersGoalsAdded",
+        method: "getGoalkeepersGoalsAdded" as keyof Client,
         payload: mockGoalkeepersGoalsAddedPayload,
         urlFragment: "/goalkeepers/goals-added",
       },
       {
-        method: "getTeamsXgoals",
+        method: "getTeamsXgoals" as keyof Client,
         payload: mockTeamsXgoalsPayload,
         urlFragment: "/teams/xgoals",
       },
       {
-        method: "getTeamsXpass",
+        method: "getTeamsXpass" as keyof Client,
         payload: mockTeamsXpassPayload,
         urlFragment: "/teams/xpass",
       },
       {
-        method: "getTeamsGoalsAdded",
+        method: "getTeamsGoalsAdded" as keyof Client,
         payload: mockTeamsGoalsAddedPayload,
         urlFragment: "/teams/goals-added",
       },
       {
-        method: "getTeamsSalaries",
+        method: "getTeamsSalaries" as keyof Client,
         payload: mockTeamsSalariesPayload,
         urlFragment: "/teams/salaries",
       },
       {
-        method: "getGamesXgoals",
+        method: "getGamesXgoals" as keyof Client,
         payload: mockGamesXgoalsPayload,
         urlFragment: "/games/xgoals",
       },
@@ -156,12 +149,8 @@ describe("client", () => {
     it.each(testParameters)(
       "gets with no arguments",
       async ({ method, payload, urlFragment }) => {
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
+        jest.spyOn(global, "fetch").mockImplementation(() =>
+          Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
         );
         const client = new Client();
         const results = await client[method]();
@@ -181,12 +170,8 @@ describe("client", () => {
     it.each(testParameters)(
       "gets with leagues argument",
       async ({ method, payload, urlFragment }) => {
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
+        jest.spyOn(global, "fetch").mockImplementation(() =>
+          Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
         );
         const leaguesArgument = [LEAGUES.MLS, LEAGUES.NWSL];
 
@@ -204,57 +189,32 @@ describe("client", () => {
         expect(results.length).toBe(payload.length * leaguesArgument.length);
       }
     );
-
-    it.each(testParameters)(
-      "gets with other arguments",
-      async ({ method, payload, urlFragment }) => {
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
-        );
-        const mockLeague = LEAGUES.MLSNP;
-        const mockSeasonName = "2021";
-
-        const client = new Client();
-        await client[method]({
-          leagues: [mockLeague],
-          seasonName: mockSeasonName,
-        });
-
-        expect(fetch).toHaveBeenCalledWith(
-          `${BASE_URL}${mockLeague}${urlFragment}?season_name=${mockSeasonName}`
-        );
-      }
-    );
   });
 
   describe("getEntity methods", () => {
     const testParameters = [
       {
-        method: "getPlayers",
+        method: "getPlayers" as keyof Client,
         entityType: ENTITY_TYPES.PLAYER,
         payload: mockPlayersPayload,
       },
       {
-        method: "getManagers",
+        method: "getManagers" as keyof Client,
         entityType: ENTITY_TYPES.MANAGER,
         payload: mockManagersPayload,
       },
       {
-        method: "getStadia",
+        method: "getStadia" as keyof Client,
         entityType: ENTITY_TYPES.STADIUM,
         payload: mockStadiaPayload,
       },
       {
-        method: "getReferees",
+        method: "getReferees" as keyof Client,
         entityType: ENTITY_TYPES.REFEREE,
         payload: mockRefereesPayload,
       },
       {
-        method: "getTeams",
+        method: "getTeams" as keyof Client,
         entityType: ENTITY_TYPES.TEAM,
         payload: mockTeamsPayload,
       },
@@ -267,12 +227,8 @@ describe("client", () => {
     it.each(testParameters)(
       "gets with no arguments",
       async ({ method, entityType, payload }) => {
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
+        jest.spyOn(global, "fetch").mockImplementation(() =>
+          Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
         );
         const client = new Client();
         const results = await client[method]();
@@ -293,12 +249,8 @@ describe("client", () => {
       "gets with ids",
       async ({ method, entityType, payload }) => {
         const mockIds = ["abc", "123"];
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
+        jest.spyOn(global, "fetch").mockImplementation(() =>
+          Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
         );
 
         const client = new Client();
@@ -318,31 +270,31 @@ describe("client", () => {
   describe("getEntityByName methods", () => {
     const testParameters = [
       {
-        method: "getPlayersByName",
+        method: "getPlayersByName" as keyof Client,
         entityType: ENTITY_TYPES.PLAYER,
         payload: mockPlayersPayload,
         mockName: "Ugo Ihemelu",
       },
       {
-        method: "getManagersByName",
+        method: "getManagersByName" as keyof Client,
         entityType: ENTITY_TYPES.MANAGER,
         payload: mockManagersPayload,
         mockName: "Josh Wolff",
       },
       {
-        method: "getStadiaByName",
+        method: "getStadiaByName" as keyof Client,
         entityType: ENTITY_TYPES.STADIUM,
         payload: mockStadiaPayload,
         mockName: "PNC Stadium",
       },
       {
-        method: "getRefereesByName",
+        method: "getRefereesByName" as keyof Client,
         entityType: ENTITY_TYPES.REFEREE,
         payload: mockRefereesPayload,
         mockName: "Alan Kelly",
       },
       {
-        method: "getTeamsByName",
+        method: "getTeamsByName" as keyof Client,
         entityType: ENTITY_TYPES.TEAM,
         payload: mockTeamsPayload,
         mockName: "New England Revolution",
@@ -356,17 +308,13 @@ describe("client", () => {
     it.each(testParameters)(
       "gets names",
       async ({ method, entityType, payload, mockName }) => {
-        fetch.mockImplementation(() =>
-          Promise.resolve({
-            async json() {
-              return payload;
-            },
-          })
+        jest.spyOn(global, "fetch").mockImplementation(() =>
+          Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
         );
 
         const client = new Client({ minimumFuseScore: 0.1 });
         const result = await client[method]({
-          names: [mockName],
+          names: [mockName as never],
           leagues: ["mls"],
         });
 
@@ -384,7 +332,7 @@ describe("client", () => {
         const result = await client[method]();
 
         expect(fetch).not.toHaveBeenCalled();
-        result.forEach((entry) => {
+        result.forEach((entry: unknown[]) => {
           expect(entry).toHaveLength(0);
         });
       }

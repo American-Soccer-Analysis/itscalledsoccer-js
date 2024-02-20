@@ -1,4 +1,3 @@
-import fetch from "isomorphic-fetch";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import Fuse from "fuse.js";
@@ -23,18 +22,18 @@ import {
   teamsGoalsAddedParameters,
   teamsSalariesParameters,
   gamesXgoalsParameters,
-} from "./parameters.js";
+} from "./parameters";
 
 export default class Client {
   #fuses = new Map();
   #minimumFuseScore;
 
-  constructor({ minimumFuseScore } = {}) {
-    this.#minimumFuseScore = minimumFuseScore || MIN_FUSE_SCORE;
+  constructor({ minimumFuseScore = MIN_FUSE_SCORE }: { minimumFuseScore?: number } = {}) {
+    this.#minimumFuseScore = minimumFuseScore;
   }
 
   /* utils */
-  async #convertNameToId({ name, entityType, league }) {
+  async #convertNameToId({ name, entityType, league }: { name: string, entityType: string, league: string }) {
     const fuseKey = `${league}|${entityType}`;
 
     let fuse;
@@ -68,7 +67,7 @@ export default class Client {
     return result[0].item;
   }
 
-  async #getEntityIdsByName({ names = [], entityType, leagues }) {
+  async #getEntityIdsByName({ names = [], entityType, leagues }: { names?: string[], entityType: string, leagues: string[] }) {
     if (!names.length) {
       const entities = new Map();
 
@@ -94,7 +93,7 @@ export default class Client {
     );
   }
 
-  async #fetchEntity({ leagues, entityType, ids = [] }) {
+  async #fetchEntity({ leagues, entityType, ids = [] }: { leagues: string[], entityType: string, ids?: string[] }) {
     const results = await Promise.all(
       leagues.map(async (league) => {
         const url = `${BASE_URL}${league}/${pluralize(entityType)}${
@@ -116,7 +115,7 @@ export default class Client {
     return results.reduce((acc, curr) => acc.concat(curr), []);
   }
 
-  async #getStats({ leagues, urlFragment, urlParams }) {
+  async #getStats({ leagues, urlFragment, urlParams }: { leagues: string[], urlFragment: string, urlParams: object }) {
     const urls = leagues.map((league) => {
       const url = new URL(`${BASE_URL}${league}${urlFragment}`);
       if (Object.keys(urlParams).length > 0) {
@@ -163,7 +162,7 @@ export default class Client {
     });
   }
 
-  async getPlayers({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getPlayers({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -180,7 +179,7 @@ export default class Client {
   async getManagersByName({
     leagues = Object.values(LEAGUES),
     names = [],
-  } = {}) {
+  }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -194,7 +193,7 @@ export default class Client {
     });
   }
 
-  async getManagers({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getManagers({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -208,7 +207,7 @@ export default class Client {
     });
   }
 
-  async getStadiaByName({ leagues = Object.values(LEAGUES), names = [] } = {}) {
+  async getStadiaByName({ leagues = Object.values(LEAGUES), names = [] }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -222,7 +221,7 @@ export default class Client {
     });
   }
 
-  async getStadia({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getStadia({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -239,7 +238,7 @@ export default class Client {
   async getRefereesByName({
     leagues = Object.values(LEAGUES),
     names = [],
-  } = {}) {
+  }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -253,7 +252,7 @@ export default class Client {
     });
   }
 
-  async getReferees({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getReferees({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
@@ -267,7 +266,7 @@ export default class Client {
     });
   }
 
-  async getTeamsByName({ leagues = Object.values(LEAGUES), names = [] } = {}) {
+  async getTeamsByName({ leagues = Object.values(LEAGUES), names = [] }: { leagues?: string[]; names?: string[] } = {}) {
     validateStringArray({
       strings: names,
       message: `names must be an array of strings, got ${names}`,
@@ -281,7 +280,7 @@ export default class Client {
     });
   }
 
-  async getTeams({ leagues = Object.values(LEAGUES), ids = [] } = {}) {
+  async getTeams({ leagues = Object.values(LEAGUES), ids = [] }: { leagues?: string[]; ids?: string[] } = {}) {
     validateStringArray({
       strings: ids,
       message: `ids must be an array of strings, got ${ids}`,
