@@ -1,16 +1,15 @@
-import { LEAGUES } from "./constants";
+import { LEAGUES, type League } from "./constants";
 import { camelCase } from "change-case";
 
 export const validateLeagues = ({ leagues }: { leagues: string[] }) => {
+  const leagueValues = Object.values(LEAGUES) as readonly League[];
   console.assert(
-    leagues.every((league) => Object.values(LEAGUES).includes(league)),
-    `leagues must be an array of ${Object.values(LEAGUES).join(
-      ", "
-    )}; got ${leagues} instead`
+    leagues.every((league) => leagueValues.includes(league as League)),
+    `leagues must be an array of ${leagueValues.join(", ")}; got ${leagues} instead`
   );
 };
 
-export const validateStringArray = ({ strings, message }: { strings: unknown[], message: string }) => {
+export const validateStringArray = ({ strings, message }: { strings: unknown[]; message: string }) => {
   console.assert(Array.isArray(strings), message);
   console.assert(
     strings.every((string: unknown) => typeof string === "string"),
