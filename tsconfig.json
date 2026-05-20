@@ -5,12 +5,10 @@
         "lib": ["es2022", "dom"],
         "module": "es2022",
         "target": "es2020",
-        "outDir": "dist",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
         "declaration": true
     },
     "include": ["src/**/*"],
