@@ -9,8 +9,10 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "declaration": true
+        "types": ["jest", "node"],
+        "declaration": true,
+        "rootDir": "src",
+        "outDir": "dist"
     },
-    "include": ["src/**/*"],
-    "outDir": "dist",
+    "include": ["src/**/*"]
 }
